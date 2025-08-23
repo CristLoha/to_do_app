@@ -1,53 +1,102 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+
+
+enum TaskAction { toggleComplete, edit, delete }
+
 class TaskListItem extends StatelessWidget {
   final Todo task;
-  final ValueChanged<bool?> onChanged;
-  final VoidCallback? onTap;
+  final Function(TaskAction) onActionSelected;
+  final Color color;
 
   const TaskListItem({
     super.key,
     required this.task,
-    required this.onChanged,
-    this.onTap,
+    required this.onActionSelected,
+    required this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Checkbox(
-                value: task.isCompleted,
-                onChanged: onChanged,
-                activeColor: Theme.of(context).colorScheme.primary,
-                shape: const CircleBorder(),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
+      color: color,
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
                 child: Text(
                   task.title,
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
                     fontSize: 16,
                     decoration: task.isCompleted
                         ? TextDecoration.lineThrough
                         : TextDecoration.none,
                     color: task.isCompleted
-                        ? Theme.of(context).textTheme.bodySmall?.color
-                        : Theme.of(context).textTheme.bodyLarge?.color,
+                        ? Colors.black.withOpacity(0.6)
+                        : Colors.black.withOpacity(0.8),
+                    fontWeight: FontWeight.w500,
                   ),
+                  maxLines: 4,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-            ],
-          ),
+            ),
+            Positioned(
+              top: -4,
+              right: -4,
+              child: PopupMenuButton<TaskAction>(
+                onSelected: onActionSelected,
+                icon: const Icon(Icons.more_vert),
+                tooltip: 'Opsi Lainnya',
+                itemBuilder: (BuildContext context) {
+                  return <PopupMenuEntry<TaskAction>>[
+                    if (!task.isCompleted)
+                      const PopupMenuItem<TaskAction>(
+                        value: TaskAction.toggleComplete,
+                        child: ListTile(
+                          leading: Icon(Icons.check_circle_outline),
+                          title: Text('Tandai Selesai'),
+                        ),
+                      ),
+                    if (task.isCompleted)
+                      const PopupMenuItem<TaskAction>(
+                        value: TaskAction.toggleComplete,
+                        child: ListTile(
+                          leading: Icon(Icons.replay_circle_filled_outlined),
+                          title: Text('Tandai Belum Selesai'),
+                        ),
+                      ),
+                    if (!task.isCompleted)
+                      const PopupMenuItem<TaskAction>(
+                        value: TaskAction.edit,
+                        child: ListTile(
+                          leading: Icon(Icons.edit_outlined),
+                          title: Text('Edit'),
+                        ),
+                      ),
+                    const PopupMenuDivider(),
+                    const PopupMenuItem<TaskAction>(
+                      value: TaskAction.delete,
+                      child: ListTile(
+                        leading: Icon(Icons.delete_outline, color: Colors.red),
+                        title: Text(
+                          'Hapus',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ),
+                  ];
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
