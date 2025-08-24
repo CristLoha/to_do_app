@@ -4,13 +4,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_app/src/core/router/app_router.dart';
+import 'package:to_do_app/src/core/services/notification_service.dart';
 import 'package:to_do_app/src/core/theme/app_theme.dart';
 import 'package:to_do_app/src/features/todo/presentation/bloc/theme/theme_bloc.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await NotificationService().initialize();
+  
   if (!kIsWeb && (Platform.isWindows || Platform.isMacOS || Platform.isLinux)) {
     await windowManager.ensureInitialized();
 

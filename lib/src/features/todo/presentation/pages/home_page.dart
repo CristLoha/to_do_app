@@ -193,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                         filled: true,
                         fillColor: Theme.of(
                           context,
-                        ).colorScheme.surfaceVariant.withOpacity(0.5),
+                        ).colorScheme.surfaceContainerHighest.withOpacity(0.5),
                       ),
                     ),
                   ),

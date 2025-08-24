@@ -12,6 +12,7 @@ class AppTheme {
   static const _textColorDark = Color(0xFFF5F5F7);
 
   static final ThemeData lightTheme = ThemeData(
+    fontFamily: 'Inter',
     colorScheme: ColorScheme.fromSeed(
       seedColor: _primaryColor,
       brightness: Brightness.light,
@@ -44,6 +45,7 @@ class AppTheme {
   );
 
   static final ThemeData darkTheme = ThemeData(
+    fontFamily: 'Inter',
     colorScheme: ColorScheme.fromSeed(
       seedColor: _primaryColor,
       brightness: Brightness.dark,
